@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var typeSegmented: UISegmentedControl!
@@ -19,7 +19,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        setupTextField()
     }
     
     
@@ -34,11 +34,16 @@ class ViewController: UIViewController {
     @IBAction func stepperChanged(_ sender: UIStepper) {
     }
     
-    
-    
-    
-    
 
+    }
 
+extension ViewController: UITextFieldDelegate {
+    func setupTextField() {
+        nameTextField.delegate = self
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }
-
