@@ -19,17 +19,21 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var sizeLabel: UILabel!
     @IBOutlet weak var genderLabel: UILabel!
     
+    var colors: [String] = ["Blanc", "Noir", "Rouge", "Bleu", "Vert"]
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTextField()
         updateGenderLabel()
         updateSizeLabel()
+        getImage()
     }
     
     func getImage() {
         let imageString = getGender() + "_" + getType() + "_" + getColor()
-        print(imageString)
+        resultImageView.image = UIImage(named: imageString)
+        updateResultLabel()
     }
 
     func getType() -> String {
@@ -45,7 +49,23 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     func getColor() -> String {
-        return ""
+        let index = colorPicker.selectedRow(inComponent: 0)
+        switch index {
+        case 0: return "white"
+        case 1: return "black"
+        case 2: return "red"
+        case 3: return "blue"
+        default: return "green"
+        }
+    }
+    
+    func updateResultLabel() {
+        var str = ""
+        if let name = nameTextField.text, name != "" {
+            str += "Salut " + name + ". "
+        }
+        str += "J'ai trouvé pour vous cette chaussure dans la pointure: " + String(Int(sizeStepper.value))
+        resultLabel.text = str
     }
     
     func updateGenderLabel() {
@@ -85,5 +105,28 @@ extension ViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+}
+
+extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    func setupPicket() {
+        colorPicker.delegate = self
+        colorPicker.dataSource = self
+    }
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return colors.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return colors[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        getImage()
     }
 }
